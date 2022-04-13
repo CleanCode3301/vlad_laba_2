@@ -34,8 +34,9 @@ namespace Company
 								  select item).ToList();
 			var listAverage = collection.Queue.GroupBy(x => x is Teacher).Average(x =>
 			{
-				Teacher teacher = (Teacher)x;
-				return teacher.Salary;
+				if (x is Teacher teacher)
+					return teacher.Salary;
+				return 0;
 			});
 		}
 	}
