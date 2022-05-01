@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Company.Models
+﻿namespace Company.Models
 {
 	public class Teacher : Employee
 	{

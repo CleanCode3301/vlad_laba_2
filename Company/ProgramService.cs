@@ -1,7 +1,6 @@
 ﻿using Company.Models;
 using Company.Services;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Company
@@ -25,19 +24,35 @@ namespace Company
 
 			table.Bottom();
 
-			Func<Employee, bool> func = emp => emp.Year < DateTime.Now.Year - 30;
+			Console.WriteLine("Младше 30");
 
-			List<Employee> list = collection.Search(func);
+			int salary = 50;
 
-			var listAccountent = (from item in collection.Queue
-								  where item.Year > DateTime.Now.Year - 50 && item.Post == "Бухгалтер"
-								  select item).ToList();
-			var listAverage = collection.Queue.GroupBy(x => x is Teacher).Average(x =>
+			Func<Employee, bool> func = emp =>
 			{
-				if (x is Teacher teacher)
-					return teacher.Salary;
-				return 0;
-			});
+				if (emp is Teacher teacher)
+				{
+					return teacher.Year > DateTime.Now.Year - 30 && teacher.Salary > salary;
+				}
+				return false;
+			};
+
+			collection.Search(func)
+				.ForEach(x => Console.WriteLine(x));
+
+			Console.WriteLine("Бухгалтеры старше 50");
+			(from item in collection.Queue
+			 where item.Year < DateTime.Now.Year - 50 && item.Post == "бухгалтер"
+			 select item)
+			 .ToList()
+			 .ForEach(x => Console.WriteLine(x));
+
+			Console.WriteLine("Средний возраст");
+			collection.Queue.GroupBy(x => x.Post)
+				.ToList()
+				.ForEach(x =>
+				Console.WriteLine(x.Key + " " + (DateTime.Now.Year - Convert.ToInt32(x.Average(emp => emp.Year))))
+				);
 		}
 	}
 }
